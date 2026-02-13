@@ -1,0 +1,46 @@
+{
+  "name": "Notes.ai - Smart Notes",
+  "short_name": "Notes.ai",
+  "description": "Aplicación de notas inteligente con temas dinámicos y búsqueda AI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#d946ef",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-neural.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-solar.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-matrix.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-sunset.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Nueva Nota",
+      "short_name": "Nueva",
+      "description": "Crear una nueva nota",
+      "url": "/?action=new",
+      "icons": [{ "src": "icon-neural.svg", "sizes": "96x96" }]
+    }
+  ]
+}

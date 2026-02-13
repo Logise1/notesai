@@ -1,0 +1,16 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#000000"/>
+  <rect x="140" y="140" width="232" height="232" fill="none" stroke="#00ff41" stroke-width="4"/>
+  <text x="180" y="200" font-family="monospace" font-size="32" fill="#00ff41">NOTE</text>
+  <text x="180" y="240" font-family="monospace" font-size="24" fill="#008f11">[...]</text>
+  <text x="180" y="280" font-family="monospace" font-size="24" fill="#008f11">███</text>
+  <text x="180" y="320" font-family="monospace" font-size="20" fill="#00ff41">_.ai</text>
+  <rect x="130" y="130" width="15" height="4" fill="#00ff41"/>
+  <rect x="130" y="130" width="4" height="15" fill="#00ff41"/>
+  <rect x="367" y="130" width="15" height="4" fill="#00ff41"/>
+  <rect x="378" y="130" width="4" height="15" fill="#00ff41"/>
+  <rect x="130" y="378" width="15" height="4" fill="#00ff41"/>
+  <rect x="130" y="367" width="4" height="15" fill="#00ff41"/>
+  <rect x="367" y="378" width="15" height="4" fill="#00ff41"/>
+  <rect x="378" y="367" width="4" height="15" fill="#00ff41"/>
+</svg>

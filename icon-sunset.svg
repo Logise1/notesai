@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sunset-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a2e5e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d1b2e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="sunset-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff9f1c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffadad;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#sunset-bg)"/>
+  <rect x="130" y="130" width="252" height="252" rx="24" fill="none" stroke="url(#sunset-accent)" stroke-width="6"/>
+  <line x1="170" y1="200" x2="342" y2="200" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+  <line x1="170" y1="240" x2="342" y2="240" stroke="#ffadad" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+  <line x1="170" y1="280" x2="290" y2="280" stroke="#ffadad" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <circle cx="320" cy="320" r="8" fill="#ff9f1c" opacity="0.9"/>
+</svg>

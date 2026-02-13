@@ -1,0 +1,297 @@
+/* --- DEFINICIÓN DE TEMAS (CSS VARIABLES) --- */
+
+/* 1. NEURAL (Default) */
+body.theme-neural {
+    --bg-color: #050505;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    --card-bg: rgba(20, 20, 20, 0.6);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --accent-color: #d946ef;
+    /* Neon Purple */
+    --accent-glow: rgba(217, 70, 239, 0.2);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --radius: 1rem;
+    --noise-opacity: 0.05;
+}
+
+/* 2. SOLAR (Light/Paper) */
+body.theme-solar {
+    --bg-color: #f8f5f2;
+    --text-main: #2c3e50;
+    --text-muted: #7f8c8d;
+    --card-bg: #ffffff;
+    --card-border: #e5e5e5;
+    --accent-color: #e67e22;
+    /* Burnt Orange */
+    --accent-glow: rgba(230, 126, 34, 0.1);
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Lora', serif;
+    --radius: 2px;
+    /* Bordes más rectos */
+    --noise-opacity: 0;
+}
+
+/* 3. MATRIX (Hacker) */
+body.theme-matrix {
+    --bg-color: #000000;
+    --text-main: #00ff41;
+    --text-muted: #008f11;
+    --card-bg: #0d0d0d;
+    --card-border: #003b00;
+    --accent-color: #00ff41;
+    /* Terminal Green */
+    --accent-glow: rgba(0, 255, 65, 0.2);
+    --font-display: 'VT323', monospace;
+    --font-body: 'JetBrains Mono', monospace;
+    --radius: 0px;
+    /* Cuadrado total */
+    --noise-opacity: 0.1;
+    /* Ruido digital */
+}
+
+/* 4. SUNSET (Vaporwave) */
+body.theme-sunset {
+    --bg-color: #2d1b2e;
+    --text-main: #ffffff;
+    --text-muted: #ffadad;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(255, 200, 200, 0.1);
+    --accent-color: #ff9f1c;
+    /* Sunset Orange */
+    --accent-glow: rgba(255, 159, 28, 0.3);
+    --font-display: 'Outfit', sans-serif;
+    --font-body: 'Quicksand', sans-serif;
+    --radius: 1.5rem;
+    /* Muy redondo */
+    --noise-opacity: 0.03;
+}
+
+/* 5. OCEAN (Deep Blue) */
+body.theme-ocean {
+    --bg-color: #0a1628;
+    --text-main: #e0f2fe;
+    --text-muted: #7dd3fc;
+    --card-bg: rgba(14, 165, 233, 0.1);
+    --card-border: rgba(56, 189, 248, 0.2);
+    --accent-color: #0ea5e9;
+    /* Sky Blue */
+    --accent-glow: rgba(14, 165, 233, 0.3);
+    --font-display: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --radius: 0.75rem;
+    --noise-opacity: 0.02;
+}
+
+/* 6. FOREST (Nature Green) */
+body.theme-forest {
+    --bg-color: #0f1e13;
+    --text-main: #d1fae5;
+    --text-muted: #86efac;
+    --card-bg: rgba(34, 197, 94, 0.08);
+    --card-border: rgba(74, 222, 128, 0.15);
+    --accent-color: #22c55e;
+    /* Emerald */
+    --accent-glow: rgba(34, 197, 94, 0.25);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --radius: 0.5rem;
+    --noise-opacity: 0.04;
+}
+
+/* 7. LAVENDER (Soft Purple) */
+body.theme-lavender {
+    --bg-color: #f5f3ff;
+    --text-main: #4c1d95;
+    --text-muted: #7c3aed;
+    --card-bg: #ffffff;
+    --card-border: #ddd6fe;
+    --accent-color: #8b5cf6;
+    /* Purple */
+    --accent-glow: rgba(139, 92, 246, 0.15);
+    --font-display: 'Outfit', sans-serif;
+    --font-body: 'Quicksand', sans-serif;
+    --radius: 1.25rem;
+    --noise-opacity: 0;
+}
+
+/* 8. CYBERPUNK (Neon City) */
+body.theme-cyberpunk {
+    --bg-color: #0c0a1d;
+    --text-main: #fbbf24;
+    --text-muted: #f472b6;
+    --card-bg: rgba(236, 72, 153, 0.05);
+    --card-border: rgba(251, 191, 36, 0.2);
+    --accent-color: #ec4899;
+    /* Hot Pink */
+    --accent-glow: rgba(236, 72, 153, 0.4);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'JetBrains Mono', monospace;
+    --radius: 0.25rem;
+    --noise-opacity: 0.08;
+}
+
+/* 9. MINIMAL (Pure B&W) */
+body.theme-minimal {
+    --bg-color: #ffffff;
+    --text-main: #000000;
+    --text-muted: #737373;
+    --card-bg: #fafafa;
+    --card-border: #e5e5e5;
+    --accent-color: #000000;
+    /* Pure Black */
+    --accent-glow: rgba(0, 0, 0, 0.05);
+    --font-display: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --radius: 0.5rem;
+    --noise-opacity: 0;
+}
+
+/* 10. RETRO (Vintage Sepia) */
+body.theme-retro {
+    --bg-color: #f4e8d8;
+    --text-main: #3e2723;
+    --text-muted: #795548;
+    --card-bg: #fef7ed;
+    --card-border: #d7ccc8;
+    --accent-color: #d84315;
+    /* Deep Orange */
+    --accent-glow: rgba(216, 67, 21, 0.1);
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Lora', serif;
+    --radius: 0.25rem;
+    --noise-opacity: 0.06;
+}
+
+/* --- ESTILOS BASE APLICADOS --- */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    transition: background-color 0.5s ease, color 0.5s ease;
+    position: relative;
+}
+
+/* Ruido de fondo (visible en Neural y Matrix) */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Componentes Adaptables */
+.theme-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(10px);
+    /* Glass effect si es soportado */
+    transition: all 0.3s ease;
+}
+
+.theme-input {
+    background: rgba(125, 125, 125, 0.1);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    color: var(--text-main);
+    font-family: var(--font-body);
+}
+
+.theme-input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+h1,
+h2,
+h3,
+.font-display {
+    font-family: var(--font-display);
+}
+
+/* Estilo para Texto Resaltado */
+mark {
+    background: transparent;
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+    font-weight: bold;
+    padding: 0 2px;
+}
+
+/* Loader */
+.theme-loader-bar {
+    height: 3px;
+    width: 100%;
+    background: transparent;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.theme-loader-fill {
+    width: 100%;
+    height: 100%;
+    background: var(--accent-color);
+    transform: translateX(-100%);
+    box-shadow: 0 0 10px var(--accent-color);
+}
+
+.loading-active .theme-loader-fill {
+    animation: indeterminate 1.5s infinite linear;
+}
+
+@keyframes indeterminate {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Animaciones */
+.fade-in-up {
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botón FAB */
+.fab-btn {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    /* Contraste inverso */
+    border-radius: 50%;
+    /* Siempre redondo */
+    box-shadow: 0 4px 15px var(--accent-glow);
+}

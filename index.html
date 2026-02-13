@@ -1,0 +1,367 @@
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#050505" id="theme-color-meta">
+    <title>Notes.ai - Smart Notes</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon-neural.svg" id="favicon">
+    <link rel="apple-touch-icon" href="icon-neural.svg">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts (Cargamos todas las necesarias para los 4 temas) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&family=Playfair+Display:wght@400;700&family=Lora:wght@400;500&family=VT323&family=Outfit:wght@300;500;700&family=Quicksand:wght@400;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="h-screen w-full overflow-hidden flex flex-col theme-neural transition-colors duration-500">
+
+    <!-- Ruido de fondo -->
+    <div class="noise-overlay"></div>
+
+    <!-- CONFIGURACIÓN API -->
+
+
+    <!-- ================= VISTA: LISTA ================= -->
+    <div id="list-view" class="flex flex-col h-full relative z-10">
+
+        <!-- Header -->
+        <header class="pt-6 px-5 pb-2 sticky top-0 z-20">
+            <div class="theme-card p-4 mb-4 relative overflow-hidden group">
+
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-4xl font-bold tracking-tight">
+                        Notes<span style="color: var(--accent-color)">.ai</span>
+                    </h1>
+
+                    <div class="flex gap-2">
+                        <!-- SETTINGS BUTTON -->
+                        <button onclick="openSettings()"
+                            class="w-10 h-10 rounded-full border border-[var(--card-border)] flex items-center justify-center hover:bg-[var(--accent-glow)] transition-colors"
+                            title="Ajustes">
+                            <i class="fas fa-cog" style="color: var(--accent-color)"></i>
+                        </button>
+
+                        <!-- THEME SWITCHER BUTTON -->
+                        <button onclick="cycleTheme()"
+                            class="w-10 h-10 rounded-full border border-[var(--card-border)] flex items-center justify-center hover:bg-[var(--accent-glow)] transition-colors"
+                            title="Cambiar Tema">
+                            <i class="fas fa-palette" style="color: var(--accent-color)"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search Box -->
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i id="search-icon" class="fas fa-search transition-colors opacity-50"></i>
+                    </div>
+                    <input type="text" id="search-input" class="theme-input block w-full pl-11 pr-4 py-3.5 text-lg"
+                        placeholder="Buscar..." autocomplete="off">
+                    <!-- Loading Line -->
+                    <div id="search-loader" class="theme-loader-bar">
+                        <div class="theme-loader-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Etiqueta de tema actual (Fugaz) -->
+            <div id="theme-toast" class="text-center text-xs opacity-0 transition-opacity duration-300 font-display"
+                style="color: var(--text-muted)">
+                THEME: NEURAL
+            </div>
+        </header>
+
+        <!-- Contenedor Principal -->
+        <main id="main-container" class="flex-1 overflow-y-auto no-scrollbar px-5 pb-32 relative">
+
+            <!-- Shimmer Loading -->
+            <div id="shimmer-container" class="hidden space-y-4 mt-2">
+                <div class="theme-card p-5 h-28 flex flex-col justify-between opacity-50">
+                    <div class="h-6 bg-gray-500/20 rounded w-2/3 animate-pulse"></div>
+                    <div class="space-y-2">
+                        <div class="h-3 bg-gray-500/20 rounded w-full animate-pulse"></div>
+                        <div class="h-3 bg-gray-500/20 rounded w-1/2 animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Notas -->
+            <div id="notes-list" class="space-y-4 mt-2">
+                <!-- Se inyectan aquí -->
+            </div>
+        </main>
+
+        <!-- Botón Flotante -->
+        <button onclick="openEditor()"
+            class="fab-btn absolute bottom-8 right-6 w-16 h-16 flex items-center justify-center text-2xl hover:scale-110 transition-transform duration-300 z-30">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- ================= VISTA: EDITOR ================= -->
+    <div id="editor-view"
+        class="fixed inset-0 z-50 flex flex-col translate-x-full transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1)"
+        style="background: var(--bg-color);">
+
+        <!-- Toolbar -->
+        <div class="flex items-center justify-between p-6 border-b" style="border-color: var(--card-border)">
+            <button onclick="closeEditor()"
+                class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--accent-glow)] transition-colors"
+                style="color: var(--text-muted)">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </button>
+
+            <div class="flex items-center gap-4">
+                <!-- Botón Clip -->
+                <button onclick="document.getElementById('file-upload').click()" id="clip-btn"
+                    class="transform hover:scale-110 active:scale-95 transition-all" style="color: var(--text-muted)">
+                    <i class="fas fa-paperclip text-xl"></i>
+                </button>
+                <input type="file" id="file-upload" class="hidden" accept="image/*">
+
+                <!-- Botón Borrar -->
+                <button onclick="deleteCurrentNote()" id="btn-delete"
+                    class="text-red-400 hover:text-red-500 transition-colors hidden">
+                    <i class="fas fa-trash text-lg"></i>
+                </button>
+
+                <!-- Botón Guardar -->
+                <button onclick="saveAndClose()"
+                    class="font-bold px-6 py-2 rounded-lg transition-all transform hover:-translate-y-0.5 text-sm tracking-wide"
+                    style="background: var(--accent-color); color: var(--bg-color);">
+                    GUARDAR
+                </button>
+            </div>
+        </div>
+
+        <!-- Editor Content -->
+        <div class="flex-1 flex flex-col overflow-y-auto no-scrollbar">
+            <div class="p-8 pb-32">
+                <!-- Título -->
+                <input type="text" id="note-title"
+                    class="text-4xl font-bold bg-transparent border-none focus:outline-none mb-6 w-full tracking-tight"
+                    style="color: var(--text-main); font-family: var(--font-display);" placeholder="Título">
+
+                <!-- Galería -->
+                <div id="image-gallery" class="grid grid-cols-3 gap-3 mb-8 empty:hidden animate-fade-in-up"></div>
+
+                <!-- Texto -->
+                <textarea id="note-content"
+                    class="w-full h-full min-h-[50vh] text-lg bg-transparent border-none focus:outline-none resize-none leading-relaxed"
+                    style="color: var(--text-main); font-family: var(--font-body);"
+                    placeholder="Escribe aquí..."></textarea>
+
+                <div class="flex items-center gap-2 mt-12 pt-6 border-t opacity-50"
+                    style="border-color: var(--card-border)">
+                    <div class="w-2 h-2 rounded-full animate-pulse" style="background: var(--accent-color)"></div>
+                    <div class="text-xs font-mono uppercase tracking-widest" id="note-meta"
+                        style="color: var(--text-muted)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: AJUSTES ================= -->
+    <div id="settings-modal" class="fixed inset-0 z-[100] hidden"
+        style="background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="theme-card max-w-md w-full p-6 relative animate-fade-in-up">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold font-display" style="color: var(--text-main)">Ajustes</h2>
+                    <button onclick="closeSettings()"
+                        class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--accent-glow)] transition-colors">
+                        <i class="fas fa-times" style="color: var(--text-muted)"></i>
+                    </button>
+                </div>
+
+                <!-- User Section -->
+                <div id="user-section" class="mb-6 p-4 rounded-lg border"
+                    style="border-color: var(--card-border); background: var(--accent-glow)">
+                    <div id="logged-out-state">
+                        <p class="text-sm mb-3" style="color: var(--text-muted)">Inicia sesión para sincronizar tus
+                            notas</p>
+                        <button onclick="signInWithGoogle()"
+                            class="w-full py-3 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all hover:scale-105"
+                            style="background: var(--accent-color); color: var(--bg-color)">
+                            <i class="fab fa-google"></i>
+                            <span>Iniciar con Google</span>
+                        </button>
+                    </div>
+                    <div id="logged-in-state" class="hidden">
+                        <div class="flex items-center gap-3 mb-3">
+                            <img id="user-avatar" class="w-12 h-12 rounded-full border-2"
+                                style="border-color: var(--accent-color)" src="" alt="avatar">
+                            <div class="flex-1">
+                                <p id="user-name" class="font-semibold" style="color: var(--text-main)"></p>
+                                <p id="user-email" class="text-xs" style="color: var(--text-muted)"></p>
+                            </div>
+                        </div>
+                        <button onclick="signOut()"
+                            class="w-full py-2 px-4 rounded-lg text-sm font-semibold transition-all hover:opacity-80"
+                            style="background: rgba(255,0,0,0.2); color: #ff6b6b">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Theme Selector -->
+                <div class="mb-6">
+                    <h3 class="text-sm font-bold mb-3 uppercase tracking-wider" style="color: var(--text-muted)">Tema de
+                        la App</h3>
+                    <div class="grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto no-scrollbar">
+                        <button onclick="selectTheme(0)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="0"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #050505 0%, #1a1a1a 100%)">
+                                <i class="fas fa-brain" style="color: #d946ef"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Neural</p>
+                        </button>
+                        <button onclick="selectTheme(1)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="1"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #f8f5f2 0%, #ffffff 100%)">
+                                <i class="fas fa-sun" style="color: #e67e22"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Solar</p>
+                        </button>
+                        <button onclick="selectTheme(2)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="2"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #000000 0%, #0d0d0d 100%)">
+                                <i class="fas fa-terminal" style="color: #00ff41"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Matrix</p>
+                        </button>
+                        <button onclick="selectTheme(3)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="3"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #2d1b2e 0%, #5a2e5e 100%)">
+                                <i class="fas fa-palette" style="color: #ff9f1c"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Sunset</p>
+                        </button>
+                        <button onclick="selectTheme(4)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="4"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #0a1628 0%, #1e3a5f 100%)">
+                                <i class="fas fa-water" style="color: #0ea5e9"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Ocean</p>
+                        </button>
+                        <button onclick="selectTheme(5)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="5"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #0f1e13 0%, #1a3a20 100%)">
+                                <i class="fas fa-tree" style="color: #22c55e"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Forest</p>
+                        </button>
+                        <button onclick="selectTheme(6)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="6"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%)">
+                                <i class="fas fa-flower" style="color: #8b5cf6"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Lavender
+                            </p>
+                        </button>
+                        <button onclick="selectTheme(7)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="7"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #0c0a1d 0%, #1a1535 100%)">
+                                <i class="fas fa-bolt" style="color: #ec4899"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Cyberpunk
+                            </p>
+                        </button>
+                        <button onclick="selectTheme(8)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="8"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%)">
+                                <i class="fas fa-circle" style="color: #000000"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Minimal</p>
+                        </button>
+                        <button onclick="selectTheme(9)"
+                            class="theme-option p-2 rounded-lg border-2 transition-all hover:scale-105" data-theme="9"
+                            style="border-color: var(--card-border)">
+                            <div class="w-full h-10 rounded mb-1 flex items-center justify-center"
+                                style="background: linear-gradient(135deg, #f4e8d8 0%, #fef7ed 100%)">
+                                <i class="fas fa-camera-retro" style="color: #d84315"></i>
+                            </div>
+                            <p class="text-[10px] font-semibold text-center" style="color: var(--text-main)">Retro</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Import -->
+                <div class="mb-4">
+                    <h3 class="text-sm font-bold mb-3 uppercase tracking-wider" style="color: var(--text-muted)">
+                        Importar Notas</h3>
+                    <label class="block cursor-pointer">
+                        <div class="p-4 rounded-lg border-2 border-dashed transition-all hover:border-[var(--accent-color)] hover:bg-[var(--accent-glow)]"
+                            style="border-color: var(--card-border)">
+                            <div class="flex items-center gap-3">
+                                <i class="fab fa-whatsapp text-2xl" style="color: var(--accent-color)"></i>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-sm" style="color: var(--text-main)">Chat de WhatsApp
+                                    </p>
+                                    <p class="text-xs" style="color: var(--text-muted)">Exportar e importar (.txt)</p>
+                                </div>
+                                <i class="fas fa-upload" style="color: var(--accent-color)"></i>
+                            </div>
+                        </div>
+                        <input type="file" id="whatsapp-import" accept=".txt" class="hidden">
+                    </label>
+                </div>
+
+                <!-- Sync Status -->
+                <div id="sync-status" class="hidden mt-4 p-3 rounded-lg flex items-center gap-2"
+                    style="background: var(--accent-glow)">
+                    <i class="fas fa-sync-alt fa-spin" style="color: var(--accent-color)"></i>
+                    <span class="text-xs font-mono" style="color: var(--text-main)">Sincronizando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
